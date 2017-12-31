@@ -1,0 +1,52 @@
+{
+  "notes": [
+    {
+      "important": true,
+      "content": "HTML on helppoa",
+      "date": "2017-12-10T18:39:34.091Z",
+      "id": 1
+    },
+    {
+      "id": 2,
+      "content": "Selain pystyy suorittamaan vain javascriptiä",
+      "date": "2017-12-10T18:39:34.091Z",
+      "important": true
+    },
+    {
+      "id": 3,
+      "content": "HTTP-protokollan tärkeimmät metodit ovat GET ja POST",
+      "date": "2017-12-10T19:20:14.298Z",
+      "important": false
+    },
+    {
+      "content": "RESTful-apissa uuden resurssin luominen tapahtuu metodilla POST, urlina on resurssikokoelman juuri",
+      "date": "2017-12-16T17:45:33.433Z",
+      "important": true,
+      "id": 4
+    },
+    {
+      "content": "Debuggaus muuttuu haastavammaksi kun kommunikoidaan palvelimen kanssa",
+      "date": "2017-12-16T17:56:03.024Z",
+      "important": false,
+      "id": 5
+    },
+    {
+      "content": "testing",
+      "date": "2017-12-17T14:23:28.627Z",
+      "important": false,
+      "id": 6
+    },
+    {
+      "content": "coding",
+      "date": "2017-12-17T18:23:44.566Z",
+      "important": false,
+      "id": 7
+    },
+    {
+      "content": "deploying",
+      "date": "2017-12-17T22:22:45.817Z",
+      "important": true,
+      "id": 8
+    }
+  ]
+}
