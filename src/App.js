@@ -1,19 +1,7 @@
 import React from 'react'
+import Note from './components/Note'
 import noteService from './services/notes'
 
-const Note = ({ note, toggleImportance }) => {
-  const label = note.important ? 'make not important' : 'make important'
-  return (
-    <div className='wrapper'>
-      <div>
-        {note.content} 
-      </div>  
-      <div>
-        <button onClick={toggleImportance}>{label}</button>
-      </div>
-    </div>
-  )
-}
 
 const Notification = ({ message }) => {
   if ( message===null ) {
@@ -33,7 +21,10 @@ class App extends React.Component {
       notes: [],
       new_note: '',
       showAll: true,
-      error: null
+      error: null,
+      username: '',
+      password: '',
+      user: null
     }
   }
 
@@ -41,6 +32,23 @@ class App extends React.Component {
     noteService.getAll().then(notes =>
       this.setState({ notes })
     )
+  }
+
+  login = (e) => {
+    e.preventDefault()
+    console.log('login in with', this.state.username, this.state.password)
+  }
+
+  handleNoteChange = (e) => {
+    this.setState({ new_note: e.target.value })
+  }
+
+  handlePasswordChange = (e) => {
+    this.setState({ password: e.target.value })
+  }
+
+  handleUsernameChange = (e) => {
+    this.setState({ username: e.target.value })
   }
 
   addNote = (e) => {
@@ -90,10 +98,6 @@ class App extends React.Component {
     }
   }
 
-  handleNoteChange = (e) => {
-    this.setState({ new_note: e.target.value })
-  }
-
   toggleVisible = () => {
     this.setState({showAll: !this.state.showAll})
   }
@@ -113,6 +117,39 @@ class App extends React.Component {
 
         <Notification message={this.state.error}/>
 
+        <h2>Kirjaudu</h2>
+
+        <form onSubmit={this.login}>
+          <div>
+            käyttäjätunnus
+            <input
+              value={this.state.username}
+              onChange={this.handleUsernameChange}
+            />
+          </div>
+          <div>
+            salasana
+            <input
+              type='password'
+              value={this.state.password}
+              onChange={this.handlePasswordChange}
+            />
+          </div>
+          <button>kirjaudu</button>
+        </form>
+
+        <h2>Luo uusi muistiinpano</h2>
+
+        <form onSubmit={this.addNote}>
+          <input
+            value={this.state.new_note}
+            onChange={this.handleNoteChange}
+          />
+          <button>tallenna</button>
+        </form>
+
+        <h2>Muistiinpanot</h2>
+
         <div>
           <button onClick={this.toggleVisible}>
             näytä {label}
@@ -126,14 +163,6 @@ class App extends React.Component {
             toggleImportance={this.toggleImportanceOf(note.id)}
           />)}
         </div>
-
-        <form onSubmit={this.addNote}>
-          <input 
-            value={this.state.new_note} 
-            onChange={this.handleNoteChange}
-          />
-          <button>tallenna</button>
-        </form>
 
       </div >
     ) 
