@@ -32,6 +32,13 @@ class App extends React.Component {
     noteService.getAll().then(notes =>
       this.setState({ notes })
     ) 
+    
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      this.setState({ user })
+      noteService.setToken(user.token)
+    }
   }
 
   login = async (e) => {
@@ -41,7 +48,8 @@ class App extends React.Component {
         username: this.state.username, 
         password: this.state.password
       })
-
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      noteService.setToken(user.token)
       this.setState({ username: '', password: '', user })
     } catch (exception) {
       this.setState({
