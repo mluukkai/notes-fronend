@@ -1,7 +1,7 @@
 import React from 'react'
 import Note from './components/Note'
 import noteService from './services/notes'
-
+import loginService from './services/login'
 
 const Notification = ({ message }) => {
   if ( message===null ) {
@@ -31,24 +31,34 @@ class App extends React.Component {
   componentWillMount() {
     noteService.getAll().then(notes =>
       this.setState({ notes })
-    )
+    ) 
   }
 
-  login = (e) => {
+  login = async (e) => {
     e.preventDefault()
-    console.log('login in with', this.state.username, this.state.password)
+    try {
+      const user = await loginService.login({
+        username: this.state.username, 
+        password: this.state.password
+      })
+
+      this.setState({ username: '', password: '', user })
+    } catch (exception) {
+      this.setState({
+        error: 'käyttäjätunnus tai salasana virheellinen',
+      })
+      setTimeout(() => {
+        this.setState({ error: null })
+      }, 5000)
+    }
   }
 
   handleNoteChange = (e) => {
     this.setState({ new_note: e.target.value })
   }
 
-  handlePasswordChange = (e) => {
-    this.setState({ password: e.target.value })
-  }
-
-  handleUsernameChange = (e) => {
-    this.setState({ username: e.target.value })
+  handleLoginFieldChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value })
   }
 
   addNote = (e) => {
@@ -111,33 +121,35 @@ class App extends React.Component {
 
     const byId = (note1, note2) => note1.id<note2.id ? -1 : 1
     
-    return(
+    const loginForm = () => (
       <div>
-        <h1>Muistiinpanot</h1>
-
-        <Notification message={this.state.error}/>
-
         <h2>Kirjaudu</h2>
-
+            
         <form onSubmit={this.login}>
           <div>
             käyttäjätunnus
-            <input
+                <input
               value={this.state.username}
-              onChange={this.handleUsernameChange}
+              onChange={this.handleLoginFieldChange}
+              name='username'
             />
           </div>
           <div>
             salasana
-            <input
+                <input
               type='password'
               value={this.state.password}
-              onChange={this.handlePasswordChange}
+              onChange={this.handleLoginFieldChange}
+              name='password'
             />
           </div>
           <button>kirjaudu</button>
-        </form>
+        </form> 
+      </div>
+    )
 
+    const noteForm = () => (
+      <div>
         <h2>Luo uusi muistiinpano</h2>
 
         <form onSubmit={this.addNote}>
@@ -147,6 +159,22 @@ class App extends React.Component {
           />
           <button>tallenna</button>
         </form>
+      </div>
+    )
+
+    return (
+      <div>
+        <h1>Muistiinpanot</h1>
+
+        <Notification message={this.state.error}/>
+
+        {this.state.user === null ? 
+          loginForm() :
+          <div>
+            <p>{this.state.user.name} logged in</p>
+            {noteForm()}
+          </div>
+        }
 
         <h2>Muistiinpanot</h2>
 
@@ -164,7 +192,7 @@ class App extends React.Component {
           />)}
         </div>
 
-      </div >
+      </div>
     ) 
   }
 }
