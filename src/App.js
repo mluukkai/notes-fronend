@@ -1,6 +1,9 @@
 import React from 'react'
 import Note from './components/Note'
 import noteService from './services/notes'
+import LoginForm from './components/LoginForm'
+import NoteForm from './components/NoteForm'
+import Togglable from './components/Togglable'
 import loginService from './services/login'
 
 const Notification = ({ message }) => {
@@ -32,7 +35,7 @@ class App extends React.Component {
     noteService.getAll().then(notes =>
       this.setState({ notes })
     ) 
-    
+
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -71,6 +74,7 @@ class App extends React.Component {
 
   addNote = (e) => {
     e.preventDefault()  
+    this.noteForm.toggleVisibility()
     const noteObject = {
       content: this.state.new_note,
       date: new Date(),
@@ -129,45 +133,28 @@ class App extends React.Component {
 
     const byId = (note1, note2) => note1.id<note2.id ? -1 : 1
     
-    const loginForm = () => (
-      <div>
-        <h2>Kirjaudu</h2>
-            
-        <form onSubmit={this.login}>
-          <div>
-            käyttäjätunnus
-                <input
-              value={this.state.username}
-              onChange={this.handleLoginFieldChange}
-              name='username'
-            />
-          </div>
-          <div>
-            salasana
-                <input
-              type='password'
-              value={this.state.password}
-              onChange={this.handleLoginFieldChange}
-              name='password'
-            />
-          </div>
-          <button>kirjaudu</button>
-        </form> 
-      </div>
-    )
+    const loginForm = () => {
+      return (
+        <Togglable buttonLabel="login">
+          <LoginForm
+            visible={this.state.visible}
+            username={this.state.username}
+            password={this.state.password}
+            handleChange={this.handleLoginFieldChange}
+            handleSubmit={this.login}
+          />
+        </Togglable>
+      )
+    }
 
     const noteForm = () => (
-      <div>
-        <h2>Luo uusi muistiinpano</h2>
-
-        <form onSubmit={this.addNote}>
-          <input
-            value={this.state.new_note}
-            onChange={this.handleNoteChange}
-          />
-          <button>tallenna</button>
-        </form>
-      </div>
+      <Togglable buttonLabel="new note" ref={component => this.noteForm = component}>
+        <NoteForm
+          onSubmit={this.addNote}
+          value={this.state.new_note}
+          handleChange={this.handleNoteChange}
+        />
+      </Togglable>
     )
 
     return (
