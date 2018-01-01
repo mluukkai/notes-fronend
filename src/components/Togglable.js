@@ -1,6 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 class Togglable extends React.Component {
+  static propTypes = {
+    buttonLabel: PropTypes.string.isRequired,
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -21,7 +26,7 @@ class Togglable extends React.Component {
         <div style={hideWhenVisible}>
           <button onClick={this.toggleVisibility}>{this.props.buttonLabel}</button>
         </div>
-        <div style={showWhenVisible}>
+        <div style={showWhenVisible} className='togglableContent'>
           {this.props.children}
           <button onClick={this.toggleVisibility}>cancel</button>
         </div>

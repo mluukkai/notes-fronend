@@ -4,7 +4,7 @@ const Note = ({ note, toggleImportance }) => {
   const label = note.important ? 'make not important' : 'make important'
   return (
     <div className='wrapper'>
-      <div>
+      <div className='content'>
         {note.content}
       </div>
       <div>
